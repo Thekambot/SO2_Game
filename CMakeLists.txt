@@ -9,7 +9,7 @@ add_link_options(-pthread)
 #set(CMAKE_CXX_FLAGS "-lcurses")
 #target_link_libraries(ncurses)
 
-add_executable(SO2_Game main.c blame.h blame/b_entity_player.c blame/b_entity_bot.c blame/b_entity_beast.c blame/b_server.c blame/b_internal_structs.h blame/b_internal_enums.h)
+add_executable(SO2_Game main.c blame.h blame/b_entity_player.c blame/b_entity_bot.c blame/b_entity_beast.c blame/b_server.c blame/b_internal_structs.h blame/b_internal_enums.h blame/b_map.c blame/b_maintain.c blame/b_entity.c)
 
 target_link_libraries(SO2_Game ncurses)
 target_link_libraries(SO2_Game rt)

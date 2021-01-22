@@ -17,10 +17,10 @@ void        entity_maintain(EntityInfo *);
 ServerInfo  *server_init();
 void        server_destroy(ServerInfo *);
 
-EntityInfo  *entity_init(int);
+EntityInfo  *entity_init(EntityType);
 void        entity_destroy(EntityInfo *);
 
-char        **map_load(char *, uint8_t *, uint8_t *);
-void        map_destroy(char **);
+MapData     *map_load(char *);
+void        map_destroy(MapData *);
 
 #endif //SO2_GAME_BLAME_H

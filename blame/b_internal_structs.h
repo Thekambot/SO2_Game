@@ -28,10 +28,10 @@ typedef struct
 typedef struct
 {
     char **map;
-    uint8_t camp_x;
-    uint8_t camp_y;
-    uint8_t size_x;
-    uint8_t size_y;
+    int camp_x;
+    int camp_y;
+    int size_x;
+    int size_y;
 
 } MapData;
 
@@ -39,7 +39,7 @@ typedef struct
 {
     PID this_PID;
 
-    MapData map;
+    MapData *map;
 
     EntityInfo entities[MAX_PLAYERS];
     uint8_t entities_size;

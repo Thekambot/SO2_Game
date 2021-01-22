@@ -1,3 +1,0 @@
-/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-debug/CMakeFiles/edit_cache.dir
-/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-debug/CMakeFiles/SO2_Game.dir

@@ -5,7 +5,7 @@
 
 #include "blame.h"
 
-#define MAX_PROCESSES 1 + 1 + 4 // 1 Serwer, 1 Bestie, 4 Graczy
+#define MAX_PROCESSES 1 + 4 // 1 Serwer, 1 Bestie, 4 Graczy
 
 int main()
 {
@@ -25,30 +25,30 @@ int main()
 
     if (sem_value == MAX_PROCESSES)
     {
-        ServerInfo server;
+        ServerInfo *server;
 
         server = server_init();
-        server_maintain(&server);
-        server_destroy(&server);
+        server_maintain(server);
+        server_destroy(server);
 
         sem_post(main_sem);
 
         sem_unlink("SO2_GAME_PROCESS_QUEUE");
-
-        return 0;
     }
+    else
+    {
+        int option = 1;
+        printf("Set up player (1), bot (2) or beasts (3)?\n");
+        while (scanf("%d", &option) != 1 || option < 1 || option > 3);
 
-    int option = 1;
-    printf("Set up player (1), bot (2) or beasts (3)?\n");
-    while (scanf("%d", &option) != 1 || option < 1 || option > 3);
+        EntityInfo *entity;
 
-    EntityInfo entity;
+        entity = entity_init(option);
+        entity_maintain(entity);
+        entity_destroy(entity);
 
-    entity = entity_init(option);
-    entity_maintain(&entity);
-    entity_destroy(&entity);
-
-    sem_post(main_sem);
+        sem_post(main_sem);
+    }
 
     printf("Disconnected correctly\n");
     getchar();

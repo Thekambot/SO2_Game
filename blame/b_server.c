@@ -13,20 +13,13 @@ ServerInfo *server_init()
 
     server->this_PID = getpid();
 
-    server->map = map_load("default_map.txt", &server->campsite_x, &server->campsite_y);
-
-    server->entities = (EntityInfo **)calloc(4, sizeof(EntityInfo *));
+    server->map = map_load("default_map.txt");
 
     return server;
 }
 
 void server_destroy(ServerInfo *ptr)
 {
-    for (int i = 0; i < ptr->entities_size; i++)
-        entity_destroy(ptr->entities[i]);
-
-    free(ptr->entities);
-
     map_destroy(ptr->map);
 
     free(ptr);

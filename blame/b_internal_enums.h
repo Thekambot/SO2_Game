@@ -1,0 +1,10 @@
+#ifndef SO2_GAME_B_INTERNAL_ENUMS_H
+#define SO2_GAME_B_INTERNAL_ENUMS_H
+
+typedef enum
+{
+    ENTITY_PLAYER = 1, ENTITY_BOT, ENTITY_BEAST
+
+} EntityType;
+
+#endif //SO2_GAME_B_INTERNAL_ENUMS_H

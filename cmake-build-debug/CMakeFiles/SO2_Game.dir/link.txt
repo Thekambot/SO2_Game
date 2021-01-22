@@ -1,1 +1,1 @@
-/usr/bin/cc -g   CMakeFiles/SO2_Game.dir/main.c.o  -o SO2_Game 
+/usr/bin/cc -g  -lcurses -pthread CMakeFiles/SO2_Game.dir/main.c.o CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.o CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.o CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.o CMakeFiles/SO2_Game.dir/blame/b_server.c.o  -o SO2_Game  -lrt 

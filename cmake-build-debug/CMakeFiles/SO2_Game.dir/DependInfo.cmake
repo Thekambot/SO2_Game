@@ -4,6 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_beast.c" "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-debug/CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.o"
+  "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_bot.c" "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-debug/CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.o"
+  "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_player.c" "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-debug/CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.o"
+  "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_server.c" "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-debug/CMakeFiles/SO2_Game.dir/blame/b_server.c.o"
   "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/main.c" "/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-debug/CMakeFiles/SO2_Game.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")

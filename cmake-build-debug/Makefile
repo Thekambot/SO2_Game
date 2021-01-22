@@ -123,6 +123,114 @@ SO2_Game/fast:
 	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/build
 .PHONY : SO2_Game/fast
 
+blame/b_entity_beast.o: blame/b_entity_beast.c.o
+
+.PHONY : blame/b_entity_beast.o
+
+# target to build an object file
+blame/b_entity_beast.c.o:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.o
+.PHONY : blame/b_entity_beast.c.o
+
+blame/b_entity_beast.i: blame/b_entity_beast.c.i
+
+.PHONY : blame/b_entity_beast.i
+
+# target to preprocess a source file
+blame/b_entity_beast.c.i:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.i
+.PHONY : blame/b_entity_beast.c.i
+
+blame/b_entity_beast.s: blame/b_entity_beast.c.s
+
+.PHONY : blame/b_entity_beast.s
+
+# target to generate assembly for a file
+blame/b_entity_beast.c.s:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.s
+.PHONY : blame/b_entity_beast.c.s
+
+blame/b_entity_bot.o: blame/b_entity_bot.c.o
+
+.PHONY : blame/b_entity_bot.o
+
+# target to build an object file
+blame/b_entity_bot.c.o:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.o
+.PHONY : blame/b_entity_bot.c.o
+
+blame/b_entity_bot.i: blame/b_entity_bot.c.i
+
+.PHONY : blame/b_entity_bot.i
+
+# target to preprocess a source file
+blame/b_entity_bot.c.i:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.i
+.PHONY : blame/b_entity_bot.c.i
+
+blame/b_entity_bot.s: blame/b_entity_bot.c.s
+
+.PHONY : blame/b_entity_bot.s
+
+# target to generate assembly for a file
+blame/b_entity_bot.c.s:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.s
+.PHONY : blame/b_entity_bot.c.s
+
+blame/b_entity_player.o: blame/b_entity_player.c.o
+
+.PHONY : blame/b_entity_player.o
+
+# target to build an object file
+blame/b_entity_player.c.o:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.o
+.PHONY : blame/b_entity_player.c.o
+
+blame/b_entity_player.i: blame/b_entity_player.c.i
+
+.PHONY : blame/b_entity_player.i
+
+# target to preprocess a source file
+blame/b_entity_player.c.i:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.i
+.PHONY : blame/b_entity_player.c.i
+
+blame/b_entity_player.s: blame/b_entity_player.c.s
+
+.PHONY : blame/b_entity_player.s
+
+# target to generate assembly for a file
+blame/b_entity_player.c.s:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.s
+.PHONY : blame/b_entity_player.c.s
+
+blame/b_server.o: blame/b_server.c.o
+
+.PHONY : blame/b_server.o
+
+# target to build an object file
+blame/b_server.c.o:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_server.c.o
+.PHONY : blame/b_server.c.o
+
+blame/b_server.i: blame/b_server.c.i
+
+.PHONY : blame/b_server.i
+
+# target to preprocess a source file
+blame/b_server.c.i:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_server.c.i
+.PHONY : blame/b_server.c.i
+
+blame/b_server.s: blame/b_server.c.s
+
+.PHONY : blame/b_server.s
+
+# target to generate assembly for a file
+blame/b_server.c.s:
+	$(MAKE) -f CMakeFiles/SO2_Game.dir/build.make CMakeFiles/SO2_Game.dir/blame/b_server.c.s
+.PHONY : blame/b_server.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -159,6 +267,18 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... SO2_Game"
+	@echo "... blame/b_entity_beast.o"
+	@echo "... blame/b_entity_beast.i"
+	@echo "... blame/b_entity_beast.s"
+	@echo "... blame/b_entity_bot.o"
+	@echo "... blame/b_entity_bot.i"
+	@echo "... blame/b_entity_bot.s"
+	@echo "... blame/b_entity_player.o"
+	@echo "... blame/b_entity_player.i"
+	@echo "... blame/b_entity_player.s"
+	@echo "... blame/b_server.o"
+	@echo "... blame/b_server.i"
+	@echo "... blame/b_server.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

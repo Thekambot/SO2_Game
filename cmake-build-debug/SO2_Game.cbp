@@ -76,6 +76,27 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame.h">
+			<Option target="SO2_Game"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_beast.c">
+			<Option target="SO2_Game"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_bot.c">
+			<Option target="SO2_Game"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_internal_struct.h">
+			<Option target="SO2_Game"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_player.c">
+			<Option target="SO2_Game"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_internal_enums.h">
+			<Option target="SO2_Game"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_server.c">
+			<Option target="SO2_Game"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/main.c">
 			<Option target="SO2_Game"/>
 		</Unit>

@@ -70,17 +70,77 @@ CMakeFiles/SO2_Game.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/SO2_Game.dir/main.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/main.c -o CMakeFiles/SO2_Game.dir/main.c.s
 
+CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.o: CMakeFiles/SO2_Game.dir/flags.make
+CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.o: ../blame/b_entity_player.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-wsl_profile/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.o   -c /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_player.c
+
+CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_player.c > CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.i
+
+CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_player.c -o CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.s
+
+CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.o: CMakeFiles/SO2_Game.dir/flags.make
+CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.o: ../blame/b_entity_bot.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-wsl_profile/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.o   -c /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_bot.c
+
+CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_bot.c > CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.i
+
+CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_bot.c -o CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.s
+
+CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.o: CMakeFiles/SO2_Game.dir/flags.make
+CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.o: ../blame/b_entity_beast.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-wsl_profile/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.o   -c /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_beast.c
+
+CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_beast.c > CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.i
+
+CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_entity_beast.c -o CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.s
+
+CMakeFiles/SO2_Game.dir/blame/b_server.c.o: CMakeFiles/SO2_Game.dir/flags.make
+CMakeFiles/SO2_Game.dir/blame/b_server.c.o: ../blame/b_server.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-wsl_profile/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/SO2_Game.dir/blame/b_server.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/SO2_Game.dir/blame/b_server.c.o   -c /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_server.c
+
+CMakeFiles/SO2_Game.dir/blame/b_server.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/SO2_Game.dir/blame/b_server.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_server.c > CMakeFiles/SO2_Game.dir/blame/b_server.c.i
+
+CMakeFiles/SO2_Game.dir/blame/b_server.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/SO2_Game.dir/blame/b_server.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/blame/b_server.c -o CMakeFiles/SO2_Game.dir/blame/b_server.c.s
+
 # Object files for target SO2_Game
 SO2_Game_OBJECTS = \
-"CMakeFiles/SO2_Game.dir/main.c.o"
+"CMakeFiles/SO2_Game.dir/main.c.o" \
+"CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.o" \
+"CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.o" \
+"CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.o" \
+"CMakeFiles/SO2_Game.dir/blame/b_server.c.o"
 
 # External object files for target SO2_Game
 SO2_Game_EXTERNAL_OBJECTS =
 
 SO2_Game: CMakeFiles/SO2_Game.dir/main.c.o
+SO2_Game: CMakeFiles/SO2_Game.dir/blame/b_entity_player.c.o
+SO2_Game: CMakeFiles/SO2_Game.dir/blame/b_entity_bot.c.o
+SO2_Game: CMakeFiles/SO2_Game.dir/blame/b_entity_beast.c.o
+SO2_Game: CMakeFiles/SO2_Game.dir/blame/b_server.c.o
 SO2_Game: CMakeFiles/SO2_Game.dir/build.make
 SO2_Game: CMakeFiles/SO2_Game.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-wsl_profile/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable SO2_Game"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/theka/OneDrive/Pulpit/Studia/SO2_Game/cmake-build-wsl_profile/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C executable SO2_Game"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/SO2_Game.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

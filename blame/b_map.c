@@ -8,7 +8,7 @@
 
 MapData *map_load(char *filename)
 {
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, "r, ccs=utf-8");
     if (file == NULL)
         return NULL;
 
@@ -19,10 +19,10 @@ MapData *map_load(char *filename)
         return NULL;
     }
 
-    fscanf(file,"%d %d\n", &map->camp_x, &map->camp_y);
     fscanf(file,"%d %d\n", &map->size_x, &map->size_y);
+    fscanf(file,"%d %d\n", &map->camp_x, &map->camp_y);
 
-    map->map = (char **) calloc(map->size_y + 1, sizeof(char *));
+    map->map = (char *) calloc((map->size_x * map->size_y) + 1, sizeof(char));
     if (map->map == NULL)
     {
         map_destroy(map);
@@ -30,19 +30,15 @@ MapData *map_load(char *filename)
         return NULL;
     }
 
-    for (int i = 0; i < map->camp_y; ++i)
+    int i = 0;
+    while (!feof(file))
     {
-        map->map[i] = (char *) calloc(map->size_x + 1, sizeof(char));
-        if (map->map[i] == NULL)
-        {
-            map_destroy(map);
-            fclose(file);
-            return NULL;
-        }
+        char temp = (char) getc(file);
 
-        fread(map->map[i], 1, map->size_x, file);
-        *(map->map[i] + map->size_x) = '\0';
-        fseek(file, 1, SEEK_CUR);
+        if (temp == '\n' || temp == '\r')
+            continue;
+
+        map->map[i++] = temp;
     }
 
     fclose(file);
@@ -51,13 +47,62 @@ MapData *map_load(char *filename)
 
 void map_destroy(MapData *map)
 {
-    for (int i = 0; i < map->camp_y; ++i)
-    {
-        free(map->map[i]);
-    }
+//    for (int i = 0; i < map->camp_y; ++i)
+//    {
+//        free(map->map[i]);
+//    }
 
     free(map->map);
     free(map);
+}
+
+int map_random_empty_location(MapData *map, int *x, int *y)
+{
+    int _x, _y;
+
+    // todo: Check if there any empty spaces
+
+    while (1)
+    {
+        _x = rand() % ((map->size_x - 1) + 1);
+        _y = rand() % ((map->size_y - 1) + 1);
+
+        if (map->map[_y * map->size_x + _x] == ' ')
+            break;
+    }
+
+    *x = _x;
+    *y = _y;
+
+    return 0;
+}
+
+void map_random_generate_symbol(MapData *map, int symbol)
+{
+    int x, y;
+
+    map_random_empty_location(map, &x, &y);
+
+    map->map[y * map->size_x + x] = (char) symbol;
+}
+
+int map_copy_fragment(MapData *src, int x, int y, MapData *dest)
+{
+    if (dest->map == NULL)
+    {
+        dest->map = (char *) calloc(src->size_x * src->size_y, sizeof(char));
+        if (dest->map == NULL)
+            return -1;
+        dest->size_x = src->size_x;
+        dest->size_y = src->size_y;
+    }
+
+    for (int i = 0; i < dest.; ++i)
+    {
+
+    }
+
+
 }
 
 #endif //SO2_GAME_B_MAP_C

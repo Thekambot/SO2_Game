@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <ncurses.h>
-#include <semaphore.h>
-#include <fcntl.h>
 
-#include "blame.h"
+#include "blame_maintain.h"
 
-#define MAX_PROCESSES 1 + 4 // 1 Serwer, 1 Bestie, 4 Graczy
+#define MAX_PROCESSES 1 + MAX_PLAYERS // 1 Serwer, 1 Bestie, 4 Graczy
 
 int main()
 {
@@ -22,16 +20,15 @@ int main()
     }
 
     sem_wait(main_sem);
+    sem_getvalue(main_sem, &sem_value);
 
-    if (sem_value == MAX_PROCESSES)
+    if (sem_value == MAX_PROCESSES - 1)
     {
         ServerInfo *server;
 
         server = server_init();
-        server_maintain(server);
+        maintain_server(server);
         server_destroy(server);
-
-        sem_post(main_sem);
 
         sem_unlink("SO2_GAME_PROCESS_QUEUE");
     }
@@ -44,14 +41,13 @@ int main()
         EntityInfo *entity;
 
         entity = entity_init(option);
-        entity_maintain(entity);
+        maintain_entity(entity);
         entity_destroy(entity);
 
         sem_post(main_sem);
     }
 
     printf("Disconnected correctly\n");
-    getchar();
 
     return 0;
 }

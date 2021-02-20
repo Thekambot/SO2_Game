@@ -3,8 +3,14 @@
 
 typedef enum
 {
-    ENTITY_PLAYER = 1, ENTITY_BOT, ENTITY_BEAST
+    ENTITY_HUMAN = 1, ENTITY_BOT, ENTITY_BEAST, ENTITY_TO_DESTROY
 
 } EntityType;
+
+typedef enum
+{
+    K_NONE, K_LEFT, K_RIGHT, K_UP, K_DOWN, K_QUIT
+
+} KeyCode;
 
 #endif //SO2_GAME_B_INTERNAL_ENUMS_H

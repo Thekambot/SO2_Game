@@ -37,6 +37,8 @@ typedef struct
 {
     pid_t this_PID;
     pid_t server_PID;
+    shm_t fd;
+    bool new_entity;
 
     EntityType entity_type;
     int8_t player_number;
@@ -44,15 +46,17 @@ typedef struct
     uint32_t spawn_x;
     uint32_t spawn_y;
 
+    uint32_t round;
+
     uint32_t cur_x;
     uint32_t cur_y;
-    MapData fov;
+    char fov[PLAYER_FOV_X * PLAYER_FOV_Y];
 
     uint32_t death_counter;
     uint32_t coins_found_counter;
     uint32_t coins_bank_counter;
 
-    enum {ACTION_NONE, ACTION_ACCEPTED, ACTION_REJECTED} ServerActions;
+    ActionsStatus action_status;
     KeyCode key;
     uint8_t action_cooldown;
 
@@ -63,7 +67,7 @@ typedef struct
 
 typedef struct
 {
-    shm_t fd;                 // JoinRequest
+    shm_t fd;
     void *memory_map;
     pthread_t thread;
     bool is_thread_running;
@@ -77,7 +81,7 @@ typedef struct
     pid_t player_pid;
     EntityType player_type;
 
-    enum {JOIN_UNKNOWN, JOIN_ACCEPTED, JOIN_REJECTED} join_status;
+    JoinStatus join_status;
     int player_number;
 
     sem_t server_open_request;
@@ -102,6 +106,9 @@ typedef struct
     uint32_t round_count;
 
     SHMController join_request;
+    SHMController timer;
+
+    pthread_mutex_t mutex;
 
 } ServerInfo;
 

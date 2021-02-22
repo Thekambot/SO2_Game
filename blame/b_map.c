@@ -8,7 +8,7 @@
 
 MapData *map_load(char *filename)
 {
-    FILE *file = fopen(filename, "r, ccs=utf-8");
+    FILE *file = fopen(filename, "r");
     if (file == NULL)
         return NULL;
 
@@ -88,21 +88,61 @@ void map_random_generate_symbol(MapData *map, int symbol)
 
 int map_copy_fragment(MapData *src, int x, int y, MapData *dest)
 {
-    if (dest->map == NULL)
+//    if (dest->map == NULL)
+//    {
+//        dest->map = (char *) calloc(src->size_x * src->size_y, sizeof(char));
+//        if (dest->map == NULL)
+//            return -1;
+//        dest->size_x = src->size_x;
+//        dest->size_y = src->size_y;
+//    }
+
+    for (int i = 0; i < dest->size_y; ++i)
     {
-        dest->map = (char *) calloc(src->size_x * src->size_y, sizeof(char));
-        if (dest->map == NULL)
-            return -1;
-        dest->size_x = src->size_x;
-        dest->size_y = src->size_y;
+        int src_y = y + i;
+
+        for (int j = 0; j < dest->size_x; ++j)
+        {
+            int src_x = x + j;
+
+            if (src_y < 0 || src_x < 0 || src_y >= src->size_y || src_x >= src->size_x)
+            {
+                dest->map[i * dest->size_x + j] = ' ';
+                continue;
+            }
+
+            char temp = src->map[src_y * src->size_x + src_x];
+
+            if (temp != '\0')
+                dest->map[i * dest->size_x + j] = temp;
+        }
     }
 
-    for (int i = 0; i < dest.; ++i)
+    return 0;
+}
+
+int map_copy_to_fov(MapData *src, int x, int y, char *dest)
+{
+    for (int i = 0; i < PLAYER_FOV_Y; ++i)
     {
+        int src_y = y + i;
 
+        for (int j = 0; j < PLAYER_FOV_X; ++j)
+        {
+            int src_x = x + j;
+
+            if (src_y < 0 || src_x < 0 || src_y >= src->size_y || src_x >= src->size_x)
+            {
+                dest[i * PLAYER_FOV_X + j] = ' ';
+                continue;
+            }
+
+            char temp = src->map[src_y * src->size_x + src_x];
+
+            if (temp != '\0')
+                dest[i * PLAYER_FOV_X + j] = temp;
+        }
     }
-
-
 }
 
 #endif //SO2_GAME_B_MAP_C

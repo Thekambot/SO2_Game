@@ -13,4 +13,14 @@ typedef enum
 
 } KeyCode;
 
+typedef enum
+{
+    ACTION_NONE, ACTION_ACCEPTED, ACTION_REJECTED
+} ActionsStatus;
+
+typedef enum
+{
+    JOIN_UNKNOWN, JOIN_ACCEPTED, JOIN_REJECTED
+} JoinStatus;
+
 #endif //SO2_GAME_B_INTERNAL_ENUMS_H

@@ -32,7 +32,9 @@ int         server_thread_set(ServerInfo *server, SHMController *shm, void *(*fu
 
 void        *server_join_requests_thread_function(void *arg); // arg == ServerInfo
 void        *server_timer_thread_function(void *arg); // arg == ServerInfo
-void        *server_entity_thread_function(void *arg); // arg == ArgData = {ServerInfo, SHMController}
+void        *server_entity_thread_function(void *arg); // arg == ServerInfo
+
+void        *entity_beast_thread_function(void *arg); // arg == ServerInfo
 
 int         server_entity_add(ServerInfo *server, JoinRequest *join_info);
 int         server_entity_delete(ServerInfo *server, int8_t player_number);
@@ -52,10 +54,19 @@ int         server_map_entity_delete(ServerInfo *server, int8_t player_number);
 int         server_map_loot_create(ServerInfo *server, int8_t player_numberA, int8_t player_numberB);
 int         server_map_loot_collect(ServerInfo *server, int8_t loot_number);
 
-void        server_cool_down_subtract(ServerInfo *server);
+void        server_round_update(ServerInfo *server);
 
 EntityInfo  *entity_server_connection_start(EntityType type);
 void        entity_server_connection_end(EntityInfo *entity);
+
+SHMController *entity_beast_add();
+void        entity_beast_delete(SHMController *controller);
+
+int         entity_beast_player_search(EntityInfo *entity, int *x, int *y);
+int         entity_beast_direction_move(EntityInfo *entity, int x, int y);
+
+int         beast_map_look_x(const char *map, int start_x, int start_y, int offset_x);
+int         beast_map_look_y(const char *map, int start_x, int start_y, int offset_y);
 
 int         entity_server_send_key(EntityInfo *entity, KeyCode key);
 int         entity_server_status_check(EntityInfo *entity);

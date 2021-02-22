@@ -17,6 +17,8 @@ ServerInfo *server_init()
 
     server->this_PID = getpid();
 
+    sem_init(&server->update, 0, 1);
+
     server->map = map_load(DEFAULT_MAP_PATH);
     server->map_entities = map_load(DEFAULT_MAP_PATH);
     memset(server->map_entities->map, '\0', server->map_entities->size_x * server->map_entities->size_y);
@@ -49,7 +51,7 @@ void server_destroy(ServerInfo *ptr)
     {
         if (ptr->shm_entities[i] != NULL)
         {
-            server_entity_delete(ptr, ((EntityInfo *)ptr->shm_entities[i]->memory_map)->player_number);
+            server_entity_delete(ptr, ((EntityInfo *) ptr->shm_entities[i]->memory_map)->player_number);
         }
     }
 
@@ -81,6 +83,7 @@ void server_destroy(ServerInfo *ptr)
     close(ptr->join_request.fd);
     shm_unlink(SHM_JOIN_REQUEST);
 
+    sem_destroy(&ptr->update);
     pthread_mutex_unlock(&ptr->mutex);
 
     pthread_mutex_destroy(&ptr->mutex);
@@ -151,30 +154,17 @@ void *server_timer_thread_function(void *arg)
     ServerInfo *server = (ServerInfo *) arg;
     SHMController *controller = &server->timer;
 
-    clock_t begin;
-    bool full_round = true;
-
     while (controller->is_thread_running)
     {
-        if (full_round == true)
-        {
-            begin = clock();
-            full_round = false;
-        }
+        nanosleep((const struct timespec[]){{1, 0}}, NULL);
 
         server_entity_garbage_collector(server);
 
-        double time_spent = (double)(clock() - begin) / CLOCKS_PER_SEC;
-        if (time_spent > 1.0)
-        {
-            for (int i = 1; i < MAX_ENTITIES; ++i)
-                if (server->shm_entities[i - 1] != NULL)
-                    server_entity_fov_update(server, i);
+        for (int i = 1; i < MAX_ENTITIES; ++i)
+            if (server->shm_entities[i - 1] != NULL)
+                server_entity_fov_update(server, i);
 
-            server->round_count++;
-            server_cool_down_subtract(server);
-            full_round = true;
-        }
+        server_round_update(server);
     }
 
     controller->is_thread_running = false;
@@ -186,7 +176,7 @@ int server_entity_shm_create(ServerInfo *server, JoinRequest *join_info, uint8_t
 {
     pthread_mutex_lock(&server->mutex);
 
-    if (player_number >= MAX_ENTITIES)
+    if (player_number > MAX_ENTITIES)
     {
         pthread_mutex_unlock(&server->mutex);
         return -1;
@@ -212,8 +202,7 @@ int server_entity_shm_create(ServerInfo *server, JoinRequest *join_info, uint8_t
         else if (player_number == 2) shm_player = shm_open(SHM_PLAYER2, O_CREAT | O_RDWR, 0600);
         else if (player_number == 3) shm_player = shm_open(SHM_PLAYER3, O_CREAT | O_RDWR, 0600);
         else if (player_number == 4) shm_player = shm_open(SHM_PLAYER4, O_CREAT | O_RDWR, 0600);
-    }
-    else if (join_info->player_type == ENTITY_BEAST && player_number > MAX_PLAYERS)
+    } else if (join_info->player_type == ENTITY_BEAST && player_number > MAX_PLAYERS)
     {
         if (player_number == MAX_PLAYERS + 1) shm_player = shm_open(SHM_BEAST1, O_CREAT | O_RDWR, 0600);
         else if (player_number == MAX_PLAYERS + 2) shm_player = shm_open(SHM_BEAST2, O_CREAT | O_RDWR, 0600);
@@ -227,7 +216,8 @@ int server_entity_shm_create(ServerInfo *server, JoinRequest *join_info, uint8_t
     }
 
     ftruncate(shm_player, sizeof(EntityInfo));
-    EntityInfo *player = (EntityInfo *) mmap(NULL, sizeof(EntityInfo), PROT_READ | PROT_WRITE, MAP_SHARED, shm_player, 0);
+    EntityInfo *player = (EntityInfo *) mmap(NULL, sizeof(EntityInfo), PROT_READ | PROT_WRITE, MAP_SHARED, shm_player,
+                                             0);
 
     player->player_number = player_number;
 
@@ -240,7 +230,8 @@ int server_entity_shm_create(ServerInfo *server, JoinRequest *join_info, uint8_t
     player->coins_found_counter = 0;
     player->death_counter = 0;
 
-    do { map_random_empty_location(server->map, &player->cur_x, &player->cur_y); }
+    do
+    { map_random_empty_location(server->map, &player->cur_x, &player->cur_y); }
     while (server->map_entities->map[player->cur_y * server->map_entities->size_x + player->cur_x] != '\0');
     player->spawn_x = player->cur_x;
     player->spawn_y = player->cur_y;
@@ -248,9 +239,10 @@ int server_entity_shm_create(ServerInfo *server, JoinRequest *join_info, uint8_t
     player->key = K_NONE;
     player->action_status = ACTION_NONE;
     player->action_cooldown = 1;
-    
+
     sem_init(&player->server_answer, 1, 0);
     sem_init(&player->client_answer, 1, 0);
+    sem_init(&player->update, 1, 1);
 
     server->shm_entities[player_number - 1]->fd = shm_player;
     server->shm_entities[player_number - 1]->memory_map = player;
@@ -267,7 +259,8 @@ int server_entity_add(ServerInfo *server, JoinRequest *join_info)
     if (server->beasts_count + server->player_count >= MAX_ENTITIES)
         return -1;
 
-    if (server->player_count >= MAX_PLAYERS && (join_info->player_type == ENTITY_HUMAN || join_info->player_type == ENTITY_BOT))
+    if (server->player_count >= MAX_PLAYERS &&
+        (join_info->player_type == ENTITY_HUMAN || join_info->player_type == ENTITY_BOT))
         return -1;
     if (server->beasts_count >= MAX_BEASTS && join_info->player_type == ENTITY_BEAST)
         return -1;
@@ -275,13 +268,14 @@ int server_entity_add(ServerInfo *server, JoinRequest *join_info)
     pthread_mutex_lock(&server->mutex);
 
     uint8_t player_index = (join_info->player_type == ENTITY_BEAST) ? MAX_PLAYERS : 0;
-    for (; player_index < MAX_PLAYERS; ++player_index)
+    for (; player_index < MAX_ENTITIES; ++player_index)
     {
         if (server->shm_entities[player_index] == NULL)
             break;
     }
 
-    server_entity_shm_create(server, join_info, player_index + 1);
+    int debug = server_entity_shm_create(server, join_info, player_index + 1);
+    assert(debug == 0 && "Serwer nie stworzyl SHM dla entity");
 
     if (join_info->player_type == ENTITY_BEAST)
         server->beasts_count++;
@@ -313,7 +307,7 @@ void *server_entity_thread_function(void *arg)
         if (server->shm_entities[i] == NULL) continue;
 
         controller = server->shm_entities[i];
-        entity = (EntityInfo *)controller->memory_map;
+        entity = (EntityInfo *) controller->memory_map;
 
         if (entity->new_entity)
         {
@@ -387,6 +381,8 @@ int server_entity_key_action(ServerInfo *server, EntityInfo *entity, KeyCode key
         return 1;
     }
 
+    server_map_entity_position_update(server, entity->player_number);
+
     entity->action_cooldown++;
 
     return 0;
@@ -399,7 +395,7 @@ int server_entity_respawn(ServerInfo *server, int8_t player_number)
 
     pthread_mutex_lock(&server->mutex);
 
-    EntityInfo *entity = (EntityInfo *)server->shm_entities[player_number - 1]->memory_map;
+    EntityInfo *entity = (EntityInfo *) server->shm_entities[player_number - 1]->memory_map;
 
     entity->death_counter++;
     entity->action_cooldown = 1;
@@ -418,7 +414,7 @@ int server_entity_fov_update(ServerInfo *server, int8_t player_number)
 
     pthread_mutex_lock(&server->mutex);
 
-    EntityInfo *entity = (EntityInfo *)server->shm_entities[player_number - 1]->memory_map;
+    EntityInfo *entity = (EntityInfo *) server->shm_entities[player_number - 1]->memory_map;
 
     int x = (int) entity->cur_x - (PLAYER_FOV_X / 2);
     int y = (int) entity->cur_y - (PLAYER_FOV_Y / 2);
@@ -541,6 +537,9 @@ int server_game_entity_player_behavior(ServerInfo *server, EntityInfo *entity)
 
         server_entity_respawn(server, entity->player_number);
 
+        server_map_entity_position_update(server, entity->player_number);
+        server_entity_fov_update(server, entity->player_number);
+
         return 0;
     }
 
@@ -581,7 +580,7 @@ int server_map_entity_position_update(ServerInfo *server, int8_t player_number)
     pthread_mutex_lock(&server->mutex);
 
     char *map = server->map_entities->map;
-    EntityInfo *entity = (EntityInfo *)server->shm_entities[player_number - 1]->memory_map;
+    EntityInfo *entity = (EntityInfo *) server->shm_entities[player_number - 1]->memory_map;
 
     map[entity->cur_y * server->map_entities->size_x + entity->cur_x] = (char) player_number;
 
@@ -609,7 +608,7 @@ int server_map_entity_delete(ServerInfo *server, int8_t player_number)
     pthread_mutex_lock(&server->mutex);
 
     char *map = server->map_entities->map;
-    EntityInfo *entity = (EntityInfo *)server->shm_entities[player_number - 1]->memory_map;
+    EntityInfo *entity = (EntityInfo *) server->shm_entities[player_number - 1]->memory_map;
 
     // entity->action_cooldown = 1;
     map[entity->cur_y * server->map_entities->size_x + entity->cur_x] = '\0';
@@ -633,15 +632,19 @@ int server_map_loot_create(ServerInfo *server, int8_t player_numberA, int8_t pla
     if (player_numberA == 0 || player_numberA >= MAX_PLAYERS)
         entityA = &empty;
     else
-        entityA = (EntityInfo *)server->shm_entities[player_numberA - 1]->memory_map;
+        entityA = (EntityInfo *) server->shm_entities[player_numberA - 1]->memory_map;
 
     if (player_numberB == 0 || player_numberB >= MAX_PLAYERS)
         entityB = &empty;
     else
-        entityB = (EntityInfo *)server->shm_entities[player_numberB - 1]->memory_map;
+        entityB = (EntityInfo *) server->shm_entities[player_numberB - 1]->memory_map;
 
-    if (&entityA == &entityB)
+    if (entityA->coins_found_counter == 0 && entityB->coins_found_counter == 0)
+    {
+        pthread_mutex_unlock(&server->mutex);
         return 1;
+    }
+
 
     int loot_index = 1;
     for (; loot_index < 50; ++loot_index)
@@ -655,7 +658,7 @@ int server_map_loot_create(ServerInfo *server, int8_t player_numberA, int8_t pla
     server->dropped_loots[loot_index].x = entityA->cur_x;
     server->dropped_loots[loot_index].y = entityA->cur_y;
 
-    map[entityA->cur_y * server->map_entities->size_x + entityA->cur_x] = (char)(-loot_index);
+    map[entityA->cur_y * server->map_entities->size_x + entityA->cur_x] = (char) (-loot_index);
 
     pthread_mutex_unlock(&server->mutex);
 
@@ -678,8 +681,11 @@ int server_map_loot_collect(ServerInfo *server, int8_t loot_number)
     return (int) amount;
 }
 
-void server_cool_down_subtract(ServerInfo *server)
+void server_round_update(ServerInfo *server)
 {
+    server->round_count++;
+    sem_post(&server->update);
+
     for (int i = 0; i < MAX_ENTITIES; ++i)
     {
         if (server->shm_entities[i] == NULL)
@@ -691,6 +697,7 @@ void server_cool_down_subtract(ServerInfo *server)
             entity->action_cooldown--;
 
         entity->round = server->round_count;
+        sem_post(&entity->update);
     }
 }
 
@@ -700,7 +707,8 @@ int server_entity_delete(ServerInfo *server, int8_t player_number)
     if (toDelete == NULL)
         return -1;
 
-    EntityInfo *entity = (EntityInfo *)toDelete->memory_map;
+    EntityInfo *entity = (EntityInfo *) toDelete->memory_map;
+    entity->entity_type = ENTITY_TO_DESTROY;
 
     pthread_mutex_lock(&server->mutex);
 

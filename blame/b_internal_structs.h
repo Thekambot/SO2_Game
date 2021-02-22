@@ -63,6 +63,8 @@ typedef struct
     sem_t server_answer;
     sem_t client_answer;
 
+    sem_t update;
+
 } EntityInfo;
 
 typedef struct
@@ -109,6 +111,8 @@ typedef struct
     SHMController timer;
 
     pthread_mutex_t mutex;
+
+    sem_t update;
 
 } ServerInfo;
 

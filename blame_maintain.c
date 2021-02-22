@@ -18,12 +18,15 @@ void maintain_server(ServerInfo *server)
     WINDOW *debug = newwin(0, 0, server->map->size_y + 5, 0);
     WINDOW *info = newwin(100, 200, 0, server->map->size_x + 5);
 
+    SHMController *beast[MAX_BEASTS] = {0};
     pthread_t stdinController;
     pthread_create(&stdinController, NULL, maintain_stdin_controller, NULL);
     int *pressed_key;
 
     while (1)
     {
+        sem_wait(&server->update);
+
         werase(map);
         maintain_map_print(0, 0, map, server->map);
         maintain_map_print(0, 0, map, server->map_entities);
@@ -38,22 +41,48 @@ void maintain_server(ServerInfo *server)
         if (pthread_tryjoin_np(stdinController, (void *) &pressed_key) == 0)
         {
             char *decoded = (char *) pressed_key;
-            mvwprintw(debug, 0, 0, "Button pressed: %02x %02x %02x %02x", decoded[0], decoded[1], decoded[2], decoded[3]);
+            mvwprintw(debug, 0, 0, "Button pressed: %02x %02x %02x %02x", decoded[0], decoded[1], decoded[2],
+                      decoded[3]);
             wrefresh(debug);
 
             if (*pressed_key == 'q' || *pressed_key == 'Q')
             {
                 free(pressed_key);
                 break;
+            } else if (*pressed_key == 'b' || *pressed_key == 'B')
+            {
+                if (server->beasts_count >= MAX_BEASTS - 1)
+                {
+                    mvwprintw(debug, 1, 0, "Cannot add beasts");
+                    wrefresh(debug);
+                }
+                else
+                {
+                    for (int i = 0; i < MAX_BEASTS; ++i)
+                    {
+                        if (beast[i] == NULL)
+                        {
+                            beast[i] = entity_beast_add();
+                            break;
+                        }
+
+                    }
+                }
+            } else
+            {
+                maintain_map_add_symbol(server->map, *pressed_key);
             }
 
-            maintain_map_add_symbol(server->map, *pressed_key);
+
             free(pressed_key);
 
             pthread_create(&stdinController, NULL, maintain_stdin_controller, NULL);
         }
 
     }
+
+    for (int i = 0; i < MAX_BEASTS; ++i)
+        entity_beast_delete(beast[i]);
 
     endwin();
 }
@@ -92,6 +121,8 @@ void maintain_entity(EntityInfo *entity)
             break;
         }
 
+        nanosleep((const struct timespec[]){{0, 200000000L }}, NULL);
+
         werase(map);
         maintain_map_print(0, 0, map, &fov);
         wrefresh(map);
@@ -103,7 +134,8 @@ void maintain_entity(EntityInfo *entity)
         if (pthread_tryjoin_np(stdinController, (void *) &pressed_key) == 0)
         {
             char *decoded = (char *) pressed_key;
-            mvwprintw(debug, 0, 0, "Button pressed: %02x %02x %02x %02x", decoded[0], decoded[1], decoded[2], decoded[3]);
+            mvwprintw(debug, 0, 0, "Button pressed: %02x %02x %02x %02x", decoded[0], decoded[1], decoded[2],
+                      decoded[3]);
             wrefresh(debug);
 
             KeyCode key = maintain_int_to_KeyCode(*pressed_key);
@@ -165,19 +197,25 @@ KeyCode maintain_int_to_KeyCode(int key)
 
     switch (res)
     {
-        case 0x44:  return K_LEFT;
-        case 0x43:  return K_RIGHT;
-        case 0x41:  return K_UP;
-        case 0x42:  return K_DOWN;
+        case 0x44:
+            return K_LEFT;
+        case 0x43:
+            return K_RIGHT;
+        case 0x41:
+            return K_UP;
+        case 0x42:
+            return K_DOWN;
 
         case 'q':
-        case 'Q':   return K_QUIT;
+        case 'Q':
+            return K_QUIT;
 
-        default:    return K_NONE;
+        default:
+            return K_NONE;
     }
 }
 
-void  maintain_map_print(int y, int x, WINDOW *window, MapData *map)
+void maintain_map_print(int y, int x, WINDOW *window, MapData *map)
 {
     for (int i = 0; i < map->size_y; ++i)
     {
@@ -212,15 +250,15 @@ void maintain_server_info_print(int y, int x, WINDOW *window, ServerInfo *server
     mvwprintw(window, y++, x + 1, "Campsite X/Y: %d/%d", server->map->camp_x, server->map->camp_y);
     mvwprintw(window, y++, x + 1, "Round number: %d", server->round_count);
 
-    mvwprintw(window, y++, x,       "Parameter:   ");
-    mvwprintw(window, y++, x + 1,   "PID:          ");
-    mvwprintw(window, y++, x + 1,   "Type:         ");
-    mvwprintw(window, y++, x + 1,   "Curr X/Y:     ");
-    mvwprintw(window, y++, x + 1,   "Deaths:       ");
+    mvwprintw(window, y++, x, "Parameter:   ");
+    mvwprintw(window, y++, x + 1, "PID:          ");
+    mvwprintw(window, y++, x + 1, "Type:         ");
+    mvwprintw(window, y++, x + 1, "Curr X/Y:     ");
+    mvwprintw(window, y++, x + 1, "Deaths:       ");
     y++;
-    mvwprintw(window, y++, x,       "Coins        ");
-    mvwprintw(window, y++, x + 1,   "carried       ");
-    mvwprintw(window, y++, x + 1,   "brought       ");
+    mvwprintw(window, y++, x, "Coins        ");
+    mvwprintw(window, y++, x + 1, "carried       ");
+    mvwprintw(window, y++, x + 1, "brought       ");
     y -= 9;
 
     for (int i = 0; i < MAX_PLAYERS; ++i)
@@ -229,7 +267,7 @@ void maintain_server_info_print(int y, int x, WINDOW *window, ServerInfo *server
         x += (i + 1) * (strlen("Player") + 2);
 
         mvwprintw(window, y++, x, "Player%d", i + 1);
-        
+
         EntityInfo *entity = NULL;
         if (server->shm_entities[i] != NULL)
             entity = (EntityInfo *) server->shm_entities[i]->memory_map;
@@ -244,8 +282,7 @@ void maintain_server_info_print(int y, int x, WINDOW *window, ServerInfo *server
             mvwprintw(window, y++, x, "%d", entity->coins_found_counter);
             mvwprintw(window, y++, x, "%d", entity->coins_bank_counter);
             y -= 4;
-        }
-        else
+        } else
         {
             mvwprintw(window, y++, x, "-");
             mvwprintw(window, y++, x, "-");
